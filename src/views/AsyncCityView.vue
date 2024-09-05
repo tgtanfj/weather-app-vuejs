@@ -1,9 +1,12 @@
 <script setup>
+import CityCard from "@/components/CityCard.vue";
 import axios from "axios";
 import { onMounted, ref } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 
 const route = useRoute();
+const router = useRouter();
+
 const currentWeatherResult = ref(null);
 const weatherByHour = ref(null);
 const weather7Days = ref(null);
@@ -48,13 +51,21 @@ const getWeather7Days = async () => {
     );
     if (weather) {
       weather7Days.value = weather?.data;
-      console.log("weather7Days", weather7Days.value);
       return;
     }
     return;
   } catch (error) {
     console.log(error);
   }
+};
+
+const removeCity = () => {
+  const cities = JSON.parse(localStorage.getItem("savedCities"));
+  const updatedCities = cities.filter((city) => city.id !== route.query.id);
+  localStorage.setItem("savedCities", JSON.stringify(updatedCities));
+  router.push({
+    name: "home",
+  });
 };
 
 onMounted(() => {
@@ -76,6 +87,8 @@ onMounted(() => {
         tracking this city.
       </p>
     </div>
+    <CityCard />
+
     <!-- Weather Overview -->
     <div
       v-if="currentWeatherResult"
@@ -168,6 +181,14 @@ onMounted(() => {
           </div>
         </div>
       </div>
+    </div>
+
+    <div
+      class="flex items-center gap-2 py-12 text-white cursor-pointer duration-150 hover:text-red-500"
+      @click="removeCity"
+    >
+      <i class="fa-solid fa-trash"></i>
+      <p>Remove City</p>
     </div>
   </div>
 </template>

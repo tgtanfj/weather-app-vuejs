@@ -80,7 +80,7 @@ const addCity = () => {
     id: uid(),
     name: route.params.name,
     region: route.params.region,
-    county: route.params.county,
+    country: route.params.country,
   };
 
   savedCities.value.push(locationObj);
@@ -88,6 +88,7 @@ const addCity = () => {
 
   let query = Object.assign({}, route.query);
   delete query.preview;
+  query.id = locationObj.id
   router.replace({ query });
 };
 </script>

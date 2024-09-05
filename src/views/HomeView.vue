@@ -2,6 +2,8 @@
 import { ref } from "vue";
 import axios from "axios";
 import { useRouter } from "vue-router";
+import CityList from "./CityList.vue";
+import CityCardSkeleton from "@/components/CityCardSkeleton.vue";
 
 const searchQuery = ref("");
 const queryTimeout = ref(null);
@@ -77,6 +79,14 @@ const previewCity = (searchResult) => {
           </li>
         </template>
       </ul>
+    </div>
+    <div class="flex flex-col gap-4">
+      <Suspense>
+        <CityList />
+        <template #fallback>
+          <CityCardSkeleton />
+        </template>
+      </Suspense>
     </div>
   </main>
 </template>
